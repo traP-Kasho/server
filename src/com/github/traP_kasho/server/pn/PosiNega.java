@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 
-public class posinega {
+public class PosiNega {
     private static final String ACCESS_TOKEN = "8f0238f6-5ea2-46a1-9ac9-16f2d67d5f5a";
     private static final String END_POINT = "https://api.apitore.com/api/11/sentiment/predict";
 

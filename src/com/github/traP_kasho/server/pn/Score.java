@@ -1,47 +1,49 @@
-package com.github.traP_kasho.server.np;
+package com.github.traP_kasho.server.pn;
+
+import twitter4j.Status;
 
 /**
  * Created by poispois on 2017/07/10.
  */
 public class Score {
-    private String displayName;
-    private String[] names;
-    private double pScore;
-    private double nScore;
+    private Status status;
+    private double posScore;
+    private double negScore;
+    private double neuScore;
 
-    public String getDisplayName() {
-        return displayName;
+    public double getNeuScore() {
+        return neuScore;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setNeuScore(double neuScore) {
+        this.neuScore = neuScore;
     }
 
-    public String[] getNames() {
-        return names;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setNames(String[] names) {
-        this.names = names;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public double getpScore() {
-        return pScore;
+    public double getPosScore() {
+        return posScore;
     }
 
-    public void setpScore(double pScore) {
-        this.pScore = pScore;
+    public void setPosScore(double posScore) {
+        this.posScore = posScore;
     }
 
-    public double getnScore() {
-        return nScore;
+    public double getNegScore() {
+        return negScore;
     }
 
-    public void setnScore(double nScore) {
-        this.nScore = nScore;
+    public void setNegScore(double negScore) {
+        this.negScore = negScore;
     }
 
     public double getAllScore() {
-        return pScore - nScore;
+        return posScore - negScore;
     }
 }
