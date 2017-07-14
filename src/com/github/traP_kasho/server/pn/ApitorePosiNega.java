@@ -7,23 +7,24 @@ import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 
-public class PosiNega {
+@Deprecated
+public final class ApitorePosiNega{
     private static final String ACCESS_TOKEN = "8f0238f6-5ea2-46a1-9ac9-16f2d67d5f5a";
     private static final String END_POINT = "https://api.apitore.com/api/11/sentiment/predict";
+    private static final String ENCODING = "UTF-8";
 
     public static Score getScore(Score score) {
-        String text = score.getStatus().getText();
-        String encoding = "UTF-8";
-        String lower_text = text.toLowerCase();
+        String text = score.getStatus().getText().toLowerCase();
         try {
-            System.out.println(text);
-            text = URLEncoder.encode(lower_text, encoding);
-            System.out.println(text);
+            text = URLEncoder.encode(text, ENCODING);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        text = text.replace("*", "%2a")
+                .replace("-", "%2d")
+                .replace("_", "")
+                .replace("+", "%20");
         URL url = null;
         try {
             url = new URL(END_POINT + "?access_token=" + ACCESS_TOKEN + "&text=" + text);
