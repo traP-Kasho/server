@@ -6,29 +6,35 @@ import twitter4j.JSONObject;
 import twitter4j.JSONTokener;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by poispois on 2017/07/13.
  */
 public class ProfessorJSONConverter {
-    public static Professor toProfessor(InputStream stream) {
-        Professor professor = new Professor();
-        JSONObject obj = null;
+    public static List<Professor> toProfessor(InputStream stream) {
+        List<Professor> professors = new ArrayList<>();
+
         try {
-            obj = new JSONObject(new JSONTokener(stream));
-            professor.setDisplayName((String) obj.get("displayName"));
-            JSONArray names = obj.getJSONArray("names");
-            professor.setNames((List<String>) names);
+            JSONArray array = new JSONArray(new JSONTokener(stream));
+            for(int i = 0; i< array.length(); i++) {
+                Professor p = new Professor();
+                JSONObject obj = array.getJSONObject(i);
+                p.setDisplayName((String) obj.get("displayName"));
+                JSONArray names = obj.getJSONArray("names");
+                p.setNames((List<String>) names);
+                professors.add(p);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return professor;
+        return professors;
     }
 
     public static JSONObject toJSON(Professor prof) {
         JSONObject res = new JSONObject();
-        JSONArray names = new JSONArray(prof.getNames());
+        JSONArray names = new JSONArray(prof.getAllNames());
         JSONObject score = new JSONObject();
 
         try {
@@ -43,7 +49,6 @@ public class ProfessorJSONConverter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return res;
     }
 }

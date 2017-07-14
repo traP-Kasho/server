@@ -1,3 +1,5 @@
+package com.github.traP_kasho.server.pn;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.io.BufferedReader;
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class pojinega_jisaku {
     public static void main(String[] args)throws UnsupportedEncodingException {
-    	
+
     	int textnum = 0;//textnum番目の文字列
     	
     	for(; textnum <= 2; textnum++){//textは仮に3つとしている
@@ -55,12 +57,12 @@ public class pojinega_jisaku {
                         String line;
                         while ((line = reader.readLine()) != null) {
                             //System.out.println(line);
-                        	
+
                         	 String[] element = line.split("<word><surface>",0);
-                        	 
+
                         	 int num = 0;//繰り返しの管理/
-                        	
-                        	    
+
+
                         	 for(; num < element.length; num++){
                         	if(num != 0){
                         		//System.out.println(element[num]);
@@ -69,9 +71,9 @@ public class pojinega_jisaku {
                         		int word_num = word[0].length();
                         		if(word_num > 1){
                         			//System.out.println(word[0]);
-                        			
+
                         			//テキストファイルから単語を含む行を取ってくる
-                        	        putLine("pojinega_data.txt",  word[0], textnum, score); 
+                        	        putLine("pojinega_data.txt",  word[0], textnum, score);
                         		}
                         	}
                          }
@@ -94,7 +96,7 @@ public class pojinega_jisaku {
       
     } 
     
- 
+ @Deprecated
   public static int putLine(String fileName, String searchString, int textnum, int score[]){
  
     try {
@@ -107,10 +109,10 @@ public class pojinega_jisaku {
         while ((line = br.readLine()) != null) {
           Pattern p = Pattern.compile(searchString);
           Matcher m = p.matcher(line);
- 
+
          if (m.find()){
           //System.out.println(line);
-          
+
          if(line.indexOf("n") != -1){
         	 score[textnum]--;
          }
@@ -123,8 +125,7 @@ public class pojinega_jisaku {
          if(line.indexOf("ポジ") != -1){
         	 score[textnum]++;
          }
-          
-        }else{
+
         }
         }
  
