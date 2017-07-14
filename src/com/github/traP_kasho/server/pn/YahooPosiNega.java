@@ -3,6 +3,7 @@ package com.github.traP_kasho.server.pn;
 import com.github.traP_kasho.server.PropertyManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,9 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +32,7 @@ public final class YahooPosiNega {
     public static Score judge(Score score) {
         List<String> words = new ArrayList<>();
 
-        String text = score.getStatus().getText().toLowerCase();
+        String text = score.getText().toLowerCase();
         try {
             text = URLEncoder.encode(text, ENCODING);
         } catch (UnsupportedEncodingException e) {
@@ -78,28 +77,29 @@ public final class YahooPosiNega {
                     break;
             }
         }
-
-        score.setNegScore(sentiment[0] / (sentiment[0] + sentiment[1]));
-        score.setPosScore(sentiment[1] / (sentiment[0] + sentiment[1]));
-
+        if(sentiment[0] + sentiment[1] == 0) {
+            score.setPosScore(0.5);
+            score.setNegScore(0.5);
+        } else {
+            score.setNegScore(sentiment[0] / (sentiment[0] + sentiment[1]));
+            score.setPosScore(sentiment[1] / (sentiment[0] + sentiment[1]));
+        }
         return score;
     }
 
-    public static List<String> convertXML(InputStream stream) {
+    private static List<String> convertXML(InputStream stream) {
         List<String> res = new ArrayList<>();
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse(stream);
+            Document doc = builder.parse(new InputSource(stream));
 
             Node parentNode = doc.getDocumentElement();
             Node wordList = parentNode.getFirstChild().getLastChild();
             Node word = wordList.getFirstChild();
+            Node element;
             while(word != null) {
-                Node element = word.getFirstChild();
-                while(element != null) {
-                    if("baseform".equals(element.getNodeName())) res.add(element.getNodeValue());
-                    element.getNextSibling();
-                }
+                element = word.getFirstChild().getFirstChild();
+                res.add(element.getNodeValue());
                 word = word.getNextSibling();
             }
         } catch (ParserConfigurationException e) {
@@ -112,9 +112,11 @@ public final class YahooPosiNega {
         return res;
     }
 
-    public static int searchDictionary (String word) {
+    @Deprecated
+    private static int searchDictionary (String word) {
+        System.out.println(word);
         int res = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(DICTIONARY_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(PropertyManager.getValue("DICTIONARY_PATH"))))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Pattern p = Pattern.compile(word);

@@ -2,11 +2,10 @@ package com.github.traP_kasho.server.pn;
 
 import twitter4j.Status;
 
-/**
- * Created by poispois on 2017/07/10.
- */
+
 public class Score {
     private Status status;
+    private String text;
     private double posScore;
     private double negScore;
     private double neuScore;
@@ -41,5 +40,17 @@ public class Score {
 
     public void setNegScore(double negScore) {
         this.negScore = negScore;
+    }
+
+    public Score(){
+
+    }
+
+    public void setText(String string) {
+        this.text = string;
+    }
+
+    public String getText() {
+        return text;
     }
 }
