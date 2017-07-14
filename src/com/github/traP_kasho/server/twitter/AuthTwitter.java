@@ -1,6 +1,7 @@
 package com.github.traP_kasho.server.twitter;
 
 
+import com.github.traP_kasho.server.PropertyManager;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.Configuration;
@@ -9,17 +10,15 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.ResourceBundle;
 
 
-public class AuthTwitter {
+public final class AuthTwitter {
     private static String conKey, conSec, accToc, accSec;
-    private static final String PROPERTY_FILE_NAME = "keys";
     private static Configuration conf;
 
     static {
-        ResourceBundle bundle = ResourceBundle.getBundle(PROPERTY_FILE_NAME);
-        conKey = bundle.getString("CONKEY");
-        conSec = bundle.getString("CONSEC");
-        accToc = bundle.getString("ACCTOK");
-        accSec = bundle.getString("ACCSEC");
+        conKey = PropertyManager.getValue("CONKEY");
+        conSec = PropertyManager.getValue("CONSEC");
+        accToc = PropertyManager.getValue("ACCTOK");
+        accSec = PropertyManager.getValue("ACCSEC");
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.setDebugEnabled(true).setOAuthConsumerKey(conKey).setOAuthConsumerSecret(conSec).setOAuthAccessToken(accToc).setOAuthAccessTokenSecret(accSec);

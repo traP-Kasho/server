@@ -42,8 +42,4 @@ public class Score {
     public void setNegScore(double negScore) {
         this.negScore = negScore;
     }
-
-    public double getAllScore() {
-        return posScore - negScore;
-    }
 }

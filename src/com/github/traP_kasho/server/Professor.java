@@ -24,7 +24,7 @@ public class Professor {
         this.names.add(name);
     }
 
-    public List<String> getNames() {
+    public List<String> getAllNames() {
         return names;
     }
 
