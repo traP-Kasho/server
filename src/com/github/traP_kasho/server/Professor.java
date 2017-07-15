@@ -58,7 +58,7 @@ public class Professor implements ScoreTarget{
     public double getNegScoreSum() {
         double res = 0;
         for(Score s: scores) {
-            res =+ s.getNegScore();
+            res += s.getNegScore();
         }
         return res;
     }
@@ -67,7 +67,7 @@ public class Professor implements ScoreTarget{
     public double getPosScoreSum() {
         double res = 0;
         for(Score s: scores) {
-            res =+ s.getPosScore();
+            res += s.getPosScore();
         }
         return res;
     }
@@ -76,7 +76,7 @@ public class Professor implements ScoreTarget{
     public double getNeuScoreSum() {
         double res = 0;
         for(Score s: scores) {
-            res =+ s.getNeuScore();
+            res += s.getNeuScore();
         }
         return res;
     }

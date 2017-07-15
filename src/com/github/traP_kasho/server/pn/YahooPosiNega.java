@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,6 +28,22 @@ public final class YahooPosiNega {
     private static final String DICTIONARY_PATH = "";
     private static final int NEGATIVE = -1;
     private static final int POSITIVE = 1;
+    private static String dic;
+
+    static {
+        StringBuilder b = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(PropertyManager.getValue("DICTIONARY_PATH"))))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                b.append(line);
+                b.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dic = new String(b);
+
+    }
 
 
     public static Score judge(Score score) {
@@ -77,13 +94,9 @@ public final class YahooPosiNega {
                     break;
             }
         }
-        if(sentiment[0] + sentiment[1] == 0) {
-            score.setPosScore(0.5);
-            score.setNegScore(0.5);
-        } else {
-            score.setNegScore(sentiment[0] / (sentiment[0] + sentiment[1]));
-            score.setPosScore(sentiment[1] / (sentiment[0] + sentiment[1]));
-        }
+        score.setNegScore(sentiment[0]);
+        score.setPosScore(sentiment[1]);
+
         return score;
     }
 
@@ -112,11 +125,9 @@ public final class YahooPosiNega {
         return res;
     }
 
-    @Deprecated
-    private static int searchDictionary (String word) {
-        System.out.println(word);
+    public static int searchDictionary (String word) {
         int res = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(PropertyManager.getValue("DICTIONARY_PATH"))))) {
+        try (BufferedReader reader = new BufferedReader(new StringReader(dic))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Pattern p = Pattern.compile(word);
@@ -125,11 +136,14 @@ public final class YahooPosiNega {
                 if (m.find()){
                     if(line.indexOf("n") != -1){
                         res = NEGATIVE;
-                    } else if(line.indexOf("p") != -1){
+                    } if(line.indexOf("p") != -1){
+
                         res = POSITIVE;
-                    } else if(line.indexOf("ネガ") != -1){
+                    }if(line.indexOf("ネガ") != -1){
+
                         res = NEGATIVE;
-                    } else if(line.indexOf("ポジ") != -1){
+                    }if(line.indexOf("ポジ") != -1){
+
                         res = POSITIVE;
                     }
                 }
